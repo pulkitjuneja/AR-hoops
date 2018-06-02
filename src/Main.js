@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { ARUtils, ARPerspectiveCamera, ARView, ARDebug, ARAnchorManager } from 'three.ar.js';
 import VRControls from './utils/VRControls';
 import MoveableCube from './entities/moveableCube';
-import MoveableSphere from './entities/MoveableSphere';
+import MoveableTorus from './entities/MoveableTorus';
 
 let vrDisplay;
 let vrControls;
@@ -57,6 +57,10 @@ function onTouchEnd() {
 }
 
 function update() {
+  gameEntities.forEach((entity) => {
+    entity.update();
+  });
+
   renderer.clearColor();
   arView.render();
 
@@ -97,7 +101,9 @@ function init() {
   );
 
   gameEntities.push(new MoveableCube(scene));
-  gameEntities.push(new MoveableSphere(scene));
+  gameEntities.push(new MoveableTorus(scene, new THREE.Vector3(0, 0.2, -1.5)));
+  gameEntities.push(new MoveableTorus(scene, new THREE.Vector3(-1, 0.8, -1.5)));
+  gameEntities.push(new MoveableTorus(scene, new THREE.Vector3(1, 0.2, -1.5)));
   vrControls = new VRControls(camera);
   scene.add(camera);
 

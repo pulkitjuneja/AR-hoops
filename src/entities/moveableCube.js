@@ -39,6 +39,5 @@ export default class MoveableCube {
   }
 
   update() {
-    console.log('here');
   }
 }
