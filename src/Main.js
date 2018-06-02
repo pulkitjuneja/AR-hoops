@@ -26,7 +26,6 @@ function onTouchStart(e) {
   if (!e.touches[0]) {
     return;
   }
-  console.log('touch start');
 
   const x = ((e.touches[0].pageX / window.innerWidth) * 2) - 1;
   const y = (-(e.touches[0].pageY / window.innerHeight) * 2) + 1;
@@ -43,14 +42,9 @@ function onTouchStart(e) {
 }
 
 function onTouchEnd() {
-  console.log('touch end');
   gameEntities.forEach((entity) => {
     if (entity.wasMoved) {
       THREE.SceneUtils.detach(entity.mesh, camera, scene);
-      // camera.remove(entity.mesh);
-      // const meshWorldPosition = camera.localToWorld(entity.mesh.position);
-      // scene.add(entity.mesh);
-      // entity.mesh.position.copy(meshWorldPosition);
       entity.wasMoved = false;
     }
   });
@@ -61,10 +55,9 @@ function update() {
     entity.update();
   });
 
+  camera.updateProjectionMatrix();
   renderer.clearColor();
   arView.render();
-
-  camera.updateProjectionMatrix();
   vrControls.update();
   renderer.clearDepth();
   renderer.render(scene, camera);
@@ -100,7 +93,6 @@ function init() {
     vrDisplay.depthFar
   );
 
-  gameEntities.push(new MoveableCube(scene));
   gameEntities.push(new MoveableTorus(scene, new THREE.Vector3(0, 0.2, -1.5)));
   gameEntities.push(new MoveableTorus(scene, new THREE.Vector3(-1, 0.8, -1.5)));
   gameEntities.push(new MoveableTorus(scene, new THREE.Vector3(1, 0.2, -1.5)));

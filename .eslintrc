@@ -15,6 +15,7 @@
     "class-methods-use-this": 0,
     "no-param-reassign":0,
     "dot-notation":0,
-    "class-method-use-this":0
+    "class-method-use-this":0,
+    "func-names": 0
   }
 }
