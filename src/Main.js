@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { ARUtils, ARPerspectiveCamera, ARView, ARDebug, ARAnchorManager } from 'three.ar.js';
 import VRControls from './utils/VRControls';
-import MoveableCube from './entities/MoveableCube';
+import MoveableCube from './entities/moveableCube';
 import MoveableSphere from './entities/MoveableSphere';
 
 let vrDisplay;
@@ -26,6 +26,7 @@ function onTouchStart(e) {
   if (!e.touches[0]) {
     return;
   }
+  console.log('touch start');
 
   const x = ((e.touches[0].pageX / window.innerWidth) * 2) - 1;
   const y = (-(e.touches[0].pageY / window.innerHeight) * 2) + 1;
@@ -37,18 +38,19 @@ function onTouchStart(e) {
   intersects.forEach((intersection) => {
     const mesh = intersection.object;
     mesh.userData.parent.wasMoved = true;
-    camera.add(mesh);
-    mesh.position.set(0, -0.1, -0.4);
+    THREE.SceneUtils.attach(mesh, scene, camera);
   });
 }
 
 function onTouchEnd() {
+  console.log('touch end');
   gameEntities.forEach((entity) => {
     if (entity.wasMoved) {
-      camera.remove(entity.mesh);
-      const meshWorldPosition = camera.localToWorld(entity.mesh.position);
-      scene.add(entity.mesh);
-      entity.mesh.position.copy(meshWorldPosition);
+      THREE.SceneUtils.detach(entity.mesh, camera, scene);
+      // camera.remove(entity.mesh);
+      // const meshWorldPosition = camera.localToWorld(entity.mesh.position);
+      // scene.add(entity.mesh);
+      // entity.mesh.position.copy(meshWorldPosition);
       entity.wasMoved = false;
     }
   });

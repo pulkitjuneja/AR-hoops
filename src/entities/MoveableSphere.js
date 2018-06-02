@@ -20,8 +20,8 @@ export default class MoveableSphere {
     this.mesh.userData.parent = this;
   }
   getSphereMesh(scene) {
-    const geometry = new THREE.SphereGeometry(0.2);
-    const material = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+    const geometry = new THREE.TorusGeometry(0.4, 0.1, 20, 30);
+    const material = new THREE.MeshBasicMaterial({ color: 0xff000 });
     const sphere = new THREE.Mesh(geometry, material);
     sphere.position.set(0, 0.4, -1.5);
     scene.add(sphere);
