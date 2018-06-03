@@ -24,13 +24,12 @@ export default class Renderer {
     this.renderer.autoClear = false;
     this.canvas = this.renderer.domElement;
     document.body.appendChild(this.canvas);
-    this.arView = ARView(this.vrDisplay, this.renderer);
+    this.arView = new ARView(this.vrDisplay, this.renderer);
   }
 
   update(scene, camera, updateCallback) {
     this.renderer.clearColor();
     this.arView.render();
-    this.vrControls.update();
     this.renderer.clearDepth();
     this.renderer.render(scene, camera);
     this.vrDisplay.requestAnimationFrame(updateCallback);

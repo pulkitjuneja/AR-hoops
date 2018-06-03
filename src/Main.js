@@ -1,17 +1,14 @@
 import * as THREE from 'three';
-import { ARUtils, ARPerspectiveCamera, ARView, ARDebug, ARAnchorManager } from 'three.ar.js';
+import { ARPerspectiveCamera, ARDebug, ARAnchorManager } from 'three.ar.js';
 import VRControls from './utils/VRControls';
 import MoveableCube from './entities/moveableCube';
 import MoveableTorus from './entities/MoveableTorus';
+import Renderer from './Managers/Renderer';
 
-let vrDisplay;
 let vrControls;
-let arView;
-
-let canvas;
+const renderer = new Renderer();
 let camera;
 let scene;
-let renderer;
 let arAnchorManager;
 const gameEntities = [];
 const raycaster = new THREE.Raycaster();
@@ -19,26 +16,32 @@ const raycaster = new THREE.Raycaster();
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function onTouchStart(e) {
   if (!e.touches[0]) {
     return;
   }
+  if (e.touches.length > 1) {
+    const throwableCube = new MoveableCube(scene);
+    renderer.canvas.addEventListener('touchend', throwableCube.onTouchEnd(camera), false);
+    THREE.SceneUtils.attach(throwableCube.mesh, scene, camera);
+    gameEntities.push(throwableCube);
+  } else {
+    const x = ((e.touches[0].pageX / window.innerWidth) * 2) - 1;
+    const y = (-(e.touches[0].pageY / window.innerHeight) * 2) + 1;
 
-  const x = ((e.touches[0].pageX / window.innerWidth) * 2) - 1;
-  const y = (-(e.touches[0].pageY / window.innerHeight) * 2) + 1;
+    const mouse = new THREE.Vector2(x, y);
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children);
 
-  const mouse = new THREE.Vector2(x, y);
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(scene.children);
-
-  intersects.forEach((intersection) => {
-    const mesh = intersection.object;
-    mesh.userData.parent.wasMoved = true;
-    THREE.SceneUtils.attach(mesh, scene, camera);
-  });
+    intersects.forEach((intersection) => {
+      const mesh = intersection.object;
+      mesh.userData.parent.wasMoved = true;
+      THREE.SceneUtils.attach(mesh, scene, camera);
+    });
+  }
 }
 
 function onTouchEnd() {
@@ -54,43 +57,20 @@ function update() {
   gameEntities.forEach((entity) => {
     entity.update();
   });
-
   camera.updateProjectionMatrix();
-  renderer.clearColor();
-  arView.render();
   vrControls.update();
-  renderer.clearDepth();
-  renderer.render(scene, camera);
-  vrDisplay.requestAnimationFrame(update);
+  renderer.update(scene, camera, update);
 }
 
-function init() {
-  // Turn on the debugging panel
-  arAnchorManager = new ARAnchorManager(vrDisplay);
-
-  arAnchorManager.addEventListener('anchorsupdated', (e) => {
-    e.anchors.forEach(obj => console.log('updated', obj));
-  });
-
-  const arDebug = new ARDebug(vrDisplay);
-  document.body.appendChild(arDebug.getElement());
-
-  // Setup the three.js rendering environment
-  renderer = new THREE.WebGLRenderer({ alpha: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.autoClear = false;
-  canvas = renderer.domElement;
-  document.body.appendChild(canvas);
+const setupScene = () => {
   scene = new THREE.Scene();
 
-  arView = new ARView(vrDisplay, renderer);
   camera = new ARPerspectiveCamera(
-    vrDisplay,
+    renderer.vrDisplay,
     60,
     window.innerWidth / window.innerHeight,
-    vrDisplay.depthNear,
-    vrDisplay.depthFar
+    renderer.vrDisplay.depthNear,
+    renderer.vrDisplay.depthFar
   );
 
   gameEntities.push(new MoveableTorus(scene, new THREE.Vector3(0, 0.2, -1.5)));
@@ -98,19 +78,30 @@ function init() {
   gameEntities.push(new MoveableTorus(scene, new THREE.Vector3(1, 0.2, -1.5)));
   vrControls = new VRControls(camera);
   scene.add(camera);
+};
 
+const addCanvasEventHandlers = () => {
   window.addEventListener('resize', onWindowResize, false);
-  canvas.addEventListener('touchstart', onTouchStart, false);
-  canvas.addEventListener('touchend', onTouchEnd, false);
+  renderer.canvas.addEventListener('touchstart', onTouchStart, false);
+  renderer.canvas.addEventListener('touchend', onTouchEnd, false);
+};
 
-  update();
-}
+const init = () => {
+  renderer.initRenderer().then((success) => {
+    if (success) {
+      arAnchorManager = new ARAnchorManager(renderer.vrDisplay);
 
-ARUtils.getARDisplay().then((display) => {
-  if (display) {
-    vrDisplay = display;
-    init();
-  } else {
-    ARUtils.displayUnsupportedMessage();
-  }
-});
+      arAnchorManager.addEventListener('anchorsupdated', (e) => {
+        e.anchors.forEach(obj => console.log('updated', obj));
+      });
+      const arDebug = new ARDebug(renderer.vrDisplay);
+      document.body.appendChild(arDebug.getElement());
+      setupScene();
+      addCanvasEventHandlers();
+      update();
+    }
+  });
+};
+
+
+init();
