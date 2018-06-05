@@ -1,9 +1,0 @@
-{
-    "glsl-canvas.uniforms": {
-        "u_resolution": [
-            10,
-            10
-        ],
-        "u_time": 1.0
-    }
-}
