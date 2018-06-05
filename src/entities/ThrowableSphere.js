@@ -16,28 +16,20 @@ const colors = [
 
 const BOX_SIZE = 0.2;
 
-export default class MoveableCube extends baseEntity {
+export default class ThrowableSphere extends baseEntity {
   constructor(name, scene) {
     super(name);
     this.wasMoved = false;
     this.scene = scene;
-    this.mesh = this.getCubeMesh();
+    this.mesh = this.getSphereMesh();
     this.mesh.userData.parent = this;
     this.velocity = new THREE.Vector3();
     this.setupTouchEnd();
   }
-  getCubeMesh() {
-    const geometry = new THREE.BoxGeometry(BOX_SIZE, BOX_SIZE, BOX_SIZE);
-    const faceIndices = ['a', 'b', 'c'];
-    for (let i = 0; i < geometry.faces.length; i += 1) {
-      const f = geometry.faces[i];
-      for (let j = 0; j < 3; j += 1) {
-        const vertexIndex = f[faceIndices[j]];
-        f.vertexColors[j] = colors[vertexIndex];
-      }
-    }
+  getSphereMesh() {
+    const geometry = new THREE.SphereGeometry(0.4);
     geometry.translate(0, BOX_SIZE / 2, 0);
-    const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+    const material = new THREE.MeshPhongMaterial({ color: 0xffff67 });
     const cube = new THREE.Mesh(geometry, material);
     cube.position.set(0, 0, -1.5);
     this.scene.add(cube);

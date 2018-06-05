@@ -3,7 +3,7 @@ import baseEntity from './baseEntity';
 import renderer from '../Managers/Renderer';
 import entityManager from '../Managers/entityManager';
 
-export default class Raycaster extends baseEntity {
+export default class TouchMover extends baseEntity {
   constructor(scene) {
     super('raycCaster');
     this.scene = scene;

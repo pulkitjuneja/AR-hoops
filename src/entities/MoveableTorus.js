@@ -37,6 +37,6 @@ export default class MoveableTorus extends baseEntity {
   }
 
   update() {
-    this.shaderUniforms.time.value = gameClock.getElapsedTime() % 100;
+    this.shaderUniforms.time.value = gameClock.getElapsedTime() % 1;
   }
 }
