@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import { vertex, fragment } from '../shaders/normalShader';
 import gameClock from '../utils/gameClock';
+import baseEntity from './baseEntity';
 
-export default class MoveableTorus {
-  constructor(scene, initialPosition) {
-    this.name = 'sphere';
+export default class MoveableTorus extends baseEntity {
+  constructor(name, scene, initialPosition) {
+    super(name);
     this.wasMoved = false;
     this.shaderUniforms = this.getInitialUniforms();
     this.mesh = this.getTorusMesh(scene, initialPosition);
@@ -29,7 +30,13 @@ export default class MoveableTorus {
     };
   }
 
+  dispose() {
+    this.mesh.geometry.dispose();
+    this.mesh.material.dispose();
+    this.mesh.dispose();
+  }
+
   update() {
-    this.shaderUniforms.time.value = gameClock.getElapsedTime() % 100;
+    this.shaderUniforms.time.value = gameClock.getElapsedTime() % 1;
   }
 }

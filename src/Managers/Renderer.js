@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { ARUtils, ARView } from 'three.ar.js';
 
-export default class Renderer {
+class Renderer {
   constructor() {
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
   }
@@ -35,3 +35,6 @@ export default class Renderer {
     this.vrDisplay.requestAnimationFrame(updateCallback);
   }
 }
+
+export default new Renderer();
+
