@@ -1,10 +1,10 @@
-import baseEntity from './baseEntity';
+import BaseEntity from './BaseEntity';
 import ThrowableSphere from './ThrowableSphere';
 import renderer from '../Managers/Renderer';
-import entityManager from '../Managers/entityManager';
+import entityManager from '../Managers/EntityManager';
 
 
-export default class CubeSpawner extends baseEntity {
+export default class CubeSpawner extends BaseEntity {
   constructor(scene) {
     super('cubeSpawner');
     this.scene = scene;

@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import { ARPerspectiveCamera } from 'three.ar.js';
-import entityManager from './entityManager';
-import MoveableTorus from '../entities/MoveableTorus';
+import entityManager from './EntityManager';
+import MoveableTorus from '../Entities/MoveableTorus';
 import renderer from './Renderer';
-import VRControls from '../utils/VRControls';
-import TouchMover from '../entities/TouchMover';
-import CubeSpawner from '../entities/CubeSpawner';
+import VRControls from '../Utils/VRControls';
+import TouchMover from '../Entities/TouchMover';
+import CubeSpawner from '../Entities/CubeSpawner';
 
-export default class Engine {
+export default class App {
   start() {
     renderer.initRenderer().then((success) => {
       if (success) {

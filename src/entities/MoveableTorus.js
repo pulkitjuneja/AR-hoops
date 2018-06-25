@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { vertex, fragment } from '../shaders/normalShader';
-import gameClock from '../utils/gameClock';
-import baseEntity from './baseEntity';
+import gameClock from '../Utils/gameClock';
+import BaseEntity from './BaseEntity';
 
-export default class MoveableTorus extends baseEntity {
+export default class MoveableTorus extends BaseEntity {
   constructor(name, scene, initialPosition) {
     super(name);
     this.wasMoved = false;

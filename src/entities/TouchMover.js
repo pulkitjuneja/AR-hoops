@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import baseEntity from './baseEntity';
+import BaseEntity from './BaseEntity';
 import renderer from '../Managers/Renderer';
-import entityManager from '../Managers/entityManager';
+import entityManager from '../Managers/EntityManager';
 
-export default class TouchMover extends baseEntity {
+export default class TouchMover extends BaseEntity {
   constructor(scene) {
     super('raycCaster');
     this.scene = scene;

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import baseEntity from './baseEntity';
+import BaseEntity from './BaseEntity';
 import renderer from '../Managers/Renderer';
-import entityManager from '../Managers/entityManager';
+import entityManager from '../Managers/EntityManager';
 
 const colors = [
   new THREE.Color(0xffffff),
@@ -16,7 +16,7 @@ const colors = [
 
 const BOX_SIZE = 0.2;
 
-export default class ThrowableSphere extends baseEntity {
+export default class ThrowableSphere extends BaseEntity {
   constructor(name, scene) {
     super(name);
     this.wasMoved = false;
