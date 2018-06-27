@@ -4,8 +4,6 @@ import entityManager from './EntityManager';
 import MoveableTorus from '../Entities/MoveableTorus';
 import renderer from './Renderer';
 import VRControls from '../Utils/VRControls';
-import TouchMover from '../Entities/TouchMover';
-import CubeSpawner from '../Entities/CubeSpawner';
 
 export default class App {
   start() {
@@ -32,11 +30,8 @@ export default class App {
 
   setupScene() {
     this.scene = new THREE.Scene();
-    entityManager.addEntity(new MoveableTorus('torus1', this.scene, new THREE.Vector3(-4, 0.8, -3.5)));
-    entityManager.addEntity(new MoveableTorus('torus2', this.scene, new THREE.Vector3(0, 0.2, -3.5)));
-    entityManager.addEntity(new MoveableTorus('torus3', this.scene, new THREE.Vector3(4, 0.2, -3.5)));
-    entityManager.addEntity(new TouchMover(this.scene));
-    entityManager.addEntity(new CubeSpawner(this.scene));
+    entityManager.addEntity(new MoveableTorus('torus', this.scene, new THREE.Vector3(0, 0, -1.5)));
+    entityManager.addEntity(new MoveableTorus('torus1', this.scene, new THREE.Vector3(-1, 0, -1.5)));
     const light = new THREE.PointLight(0xff0000, 1, 100);
     light.position.set(5, 5, 5);
     this.scene.add(light);

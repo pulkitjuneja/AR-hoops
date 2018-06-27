@@ -1,4 +1,4 @@
 import App from './Managers/App';
 
-const engine = new App();
-engine.start();
+const app = new App();
+app.start();
