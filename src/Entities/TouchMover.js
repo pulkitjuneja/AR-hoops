@@ -23,7 +23,8 @@ export default class TouchMover extends BaseEntity {
         const y = (-(e.touches[0].pageY / window.innerHeight) * 2) + 1;
         const mouse = new THREE.Vector2(x, y);
         currentInstance.rayCaster.setFromCamera(mouse, entityManager.mainCamera);
-        const intersects = currentInstance.rayCaster.intersectObjects(currentInstance.scene.children);
+        const intersects = currentInstance.rayCaster
+          .intersectObjects(currentInstance.scene.children);
         intersects.forEach((intersection) => {
           const mesh = intersection.object;
           mesh.userData.parent.wasMoved = true;
