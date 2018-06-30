@@ -1,9 +1,8 @@
 const path = require('path');
-const webpack = require('webpack');
 
 module.exports = {
   entry: [
-    './src/Main.js'
+    './src/main.js'
   ],
   output: { path: __dirname, filename: 'bundle.js' },
   cache: true,
@@ -33,6 +32,5 @@ module.exports = {
   devServer: {
     compress: true,
     disableHostCheck: true,
-
   }
 };
